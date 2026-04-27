@@ -1,0 +1,132 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Perpustakaan Sekolah</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+</head>
+
+<body class="bg-gray-100 scroll-smooth">
+
+  <!-- NAVBAR -->
+  <nav class="bg-blue-600 text-white p-4 flex justify-between">
+    <h1 class="font-bold">📚 Perpustakaan</h1>
+    <a href="#app" class="hover:underline">Mulai</a>
+  </nav>
+
+  <!-- LANDING -->
+  <section class="text-center py-16 bg-gradient-to-r from-blue-500 to-indigo-600 text-white">
+    <h2 class="text-4xl font-bold mb-4">Selamat Datang di Perpustakaan Digital</h2>
+    <p class="mb-6">Kelola buku dengan mudah, cepat, dan modern</p>
+    <a href="#app" class="bg-white text-blue-600 px-6 py-3 rounded-xl font-semibold hover:bg-gray-200">
+      Mulai Sekarang
+    </a>
+  </section>
+
+  <!-- FITUR -->
+  <section class="max-w-5xl mx-auto py-10 grid md:grid-cols-3 gap-6 px-4">
+    <div class="bg-white p-4 rounded-2xl shadow text-center">
+      📖
+      <h3 class="font-bold mt-2">Manajemen Buku</h3>
+      <p class="text-sm text-gray-600">Tambah & hapus buku dengan mudah</p>
+    </div>
+    <div class="bg-white p-4 rounded-2xl shadow text-center">
+      ⚡
+      <h3 class="font-bold mt-2">Cepat</h3>
+      <p class="text-sm text-gray-600">Tanpa ribet, langsung pakai</p>
+    </div>
+    <div class="bg-white p-4 rounded-2xl shadow text-center">
+      🎯
+      <h3 class="font-bold mt-2">Sederhana</h3>
+      <p class="text-sm text-gray-600">UI bersih & mudah dipahami</p>
+    </div>
+  </section>
+
+  <!-- APP -->
+  <section id="app" class="max-w-4xl mx-auto p-4">
+
+    <!-- FORM -->
+    <div class="bg-white p-6 rounded-2xl shadow mb-6">
+      <h2 class="text-xl font-bold mb-4">Tambah Buku</h2>
+
+      <input id="judul" type="text" placeholder="Judul Buku"
+        class="w-full p-2 border rounded-lg mb-3">
+
+      <input id="penulis" type="text" placeholder="Penulis"
+        class="w-full p-2 border rounded-lg mb-3">
+
+      <button onclick="tambahBuku()"
+        class="w-full bg-blue-600 text-white p-2 rounded-lg hover:bg-blue-700 transition">
+        Tambah Buku
+      </button>
+    </div>
+
+    <!-- LIST -->
+    <div class="bg-white p-6 rounded-2xl shadow">
+      <h2 class="text-xl font-bold mb-4">Daftar Buku</h2>
+      <ul id="listBuku" class="space-y-3"></ul>
+    </div>
+
+  </section>
+
+  <!-- FOOTER -->
+  <footer class="text-center p-4 text-gray-500 text-sm">
+    © 2026 Perpustakaan Sekolah
+  </footer>
+
+  <script>
+    let buku = JSON.parse(localStorage.getItem("buku")) || [];
+
+    function simpanData() {
+      localStorage.setItem("buku", JSON.stringify(buku));
+    }
+
+    function tambahBuku() {
+      const judul = document.getElementById("judul").value;
+      const penulis = document.getElementById("penulis").value;
+
+      if (!judul || !penulis) {
+        alert("Isi semua data!");
+        return;
+      }
+
+      buku.push({ judul, penulis });
+      simpanData();
+      tampilkanBuku();
+
+      document.getElementById("judul").value = "";
+      document.getElementById("penulis").value = "";
+    }
+
+    function tampilkanBuku() {
+      const list = document.getElementById("listBuku");
+      list.innerHTML = "";
+
+      buku.forEach((b, index) => {
+        list.innerHTML += `
+          <li class="border p-3 rounded-xl flex justify-between items-center hover:shadow">
+            <div>
+              <b>${b.judul}</b><br>
+              <span class="text-sm text-gray-600">${b.penulis}</span>
+            </div>
+            <button onclick="hapusBuku(${index})"
+              class="bg-red-500 text-white px-3 py-1 rounded hover:bg-red-600">
+              Hapus
+            </button>
+          </li>
+        `;
+      });
+    }
+
+    function hapusBuku(index) {
+      buku.splice(index, 1);
+      simpanData();
+      tampilkanBuku();
+    }
+
+    tampilkanBuku();
+  </script>
+
+</body>
+</html>
